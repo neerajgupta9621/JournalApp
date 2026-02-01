@@ -1,0 +1,19 @@
+Spring:
+  profiles:
+    active: prod
+
+
+#logging:
+#  level:
+#    com:
+#      edigest:
+#        my:
+#          first:
+#            project: DEBUG
+
+logging:
+  level:
+    com.edigest.my.first.project: DEBUG
+
+
+
