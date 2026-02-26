@@ -1,8 +1,8 @@
-Spring:
+spring:
   profiles:
-    active: prod
+    active: prod,dev
 
-
+#
 #logging:
 #  level:
 #    com:
@@ -10,10 +10,7 @@ Spring:
 #        my:
 #          first:
 #            project: DEBUG
-
-logging:
-  level:
-    com.edigest.my.first.project: DEBUG
+#    com.edigest.my.first.project: DEBUG
 
 
 

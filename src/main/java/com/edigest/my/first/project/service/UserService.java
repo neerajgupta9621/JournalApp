@@ -22,23 +22,24 @@ public class UserService {
    @Autowired
      private UserRepository userRepository;
 
-    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+    // private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
 
      public boolean saveNewUser(User user){
          try{
                user.setPassword(passwordEncoder.encode(user.getPassword()));
-               user.setRoles(Arrays.asList("USER"));
-               userRepository.save(user);
-               log.error("hahahahahahahahh");
-               log.warn("hahahahahahaha ");
-             log.info("hahahahahahahahahah ");
-             log.debug("hahahahahahah ");
-             log.trace("hahahahahahahahah ");
+             //  user.setRoles(Arrays.asList("USER"));
+             user.setRoles(Arrays.asList("ROLE_USER"));
+             userRepository.save(user);
+
                return true;
          }catch (Exception e){
-             System.out.println(e);
+             e.printStackTrace();
              return false;
          }
 
@@ -46,7 +47,8 @@ public class UserService {
 
     public void saveAdmin(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList("USER","ADMIN"));
+      //  user.setRoles(Arrays.asList("USER","ADMIN"));
+        user.setRoles(Arrays.asList("ROLE_USER","ROLE_ADMIN"));
         userRepository.save(user);
     }
 

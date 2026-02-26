@@ -6,6 +6,7 @@ target/
 .vscode/
 
 # Logs
+*.yml
 *.log
 
 # Reports

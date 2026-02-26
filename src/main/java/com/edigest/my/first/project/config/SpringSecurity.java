@@ -26,20 +26,22 @@ public class SpringSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(csrf -> csrf.disable()) // csrf disable
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // stateless session
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/journal/**","/user/**").authenticated()
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/journal/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
+
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
-
     // ✅ AuthenticationManager bean (Old configure() ki jagah)
     @Bean
     public AuthenticationManager authenticationManager(

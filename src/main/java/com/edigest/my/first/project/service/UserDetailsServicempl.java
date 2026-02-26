@@ -14,17 +14,20 @@ public  class UserDetailsServicempl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-@Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-    User user = userRepository.findByUserName(username);
-    if (user != null){
-        UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUserName())
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        User user = userRepository.findByUserName(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found: " + username);
+        }
+
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getUserName())
                 .password(user.getPassword())
-                .roles(user.getRoles().toArray(new String[0]))
+                .authorities(user.getRoles().toArray(new String[0])) // ✅ CHANGE
                 .build();
-        return userDetails;
     }
-    throw new UsernameNotFoundException("User not found with username: " + username);
-  }
 }
