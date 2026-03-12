@@ -1,8 +1,10 @@
 package com.edigest.my.first.project.controller;
 
+import com.edigest.my.first.project.api.rsponse.WeatherResponse;
 import com.edigest.my.first.project.entity.User;
 import com.edigest.my.first.project.repository.UserRepository;
 import com.edigest.my.first.project.service.UserService;
+import com.edigest.my.first.project.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private WeatherService weatherService;
 
 
     @PutMapping
@@ -43,6 +47,11 @@ public class UserController {
       @GetMapping
     public ResponseEntity<?> greeting() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-         return new ResponseEntity<>("Hi 😎 " + authentication.getName(),HttpStatus.OK);
+          WeatherResponse weatherResponse = weatherService.getWeather("Mumbai");
+          String greeting = "";
+          if (weatherResponse != null){
+              greeting = ", Weather feels like " + weatherResponse.getCurrent().getFeelsLikeC();
+          }
+         return new ResponseEntity<>("Hi 😎 " + authentication.getName()+ greeting , HttpStatus.OK);
       }
     }

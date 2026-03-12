@@ -2,6 +2,24 @@ spring:
   profiles:
     active: prod,dev
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: neerajgupta962150@gmail.com
+    password: vhihhcbtilimtgxl
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
+
+weather:
+  api:
+    key: e872ed94a87e412ea2390557262602
+
 #
 #logging:
 #  level:
@@ -11,6 +29,4 @@ spring:
 #          first:
 #            project: DEBUG
 #    com.edigest.my.first.project: DEBUG
-
-
 

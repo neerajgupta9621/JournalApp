@@ -27,14 +27,16 @@ public class User {
     @Indexed(unique = true)
     @NonNull
     private String userName;
+    private String email;
+    private boolean sentimentAnalysis;
 
     @NonNull
     private String password;
 
     @DBRef
-    @Builder.Default
+//    @Builder.Default
     private List<JournalEntry> journalEntries = new ArrayList<>();
 
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
+//    @Builder.Default
+    private List<String> roles;
 }
