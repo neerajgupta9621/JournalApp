@@ -16,17 +16,27 @@ spring:
           ssl:
             trust: smtp.gmail.com
 
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    consumer:
+      group-id: weekly-sentiment-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+            value:
+              default:
+                type: com.edigest.my.first.project.sentiment.SentimentData
+
 weather:
   api:
     key: e872ed94a87e412ea2390557262602
-
-#
-#logging:
-#  level:
-#    com:
-#      edigest:
-#        my:
-#          first:
-#            project: DEBUG
-#    com.edigest.my.first.project: DEBUG
-

@@ -21,7 +21,7 @@ public  class UserDetailsServicempl implements UserDetailsService {
         User user = userRepository.findByUserName(username);
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found: " + username);
+            throw new UsernameNotFoundException("User not found with username : " + username);
         }
 
         return org.springframework.security.core.userdetails.User
