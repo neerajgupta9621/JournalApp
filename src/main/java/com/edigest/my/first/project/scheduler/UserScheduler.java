@@ -13,9 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Component
 public class UserScheduler {
@@ -32,59 +30,62 @@ public class UserScheduler {
     @Autowired
     private KafkaTemplate<String, SentimentData> kafkaTemplate;
 
-    // 👉 Test ke liye manually call kar sakta hai
-    @Scheduled(cron = "0 0 9 ? * SUN") //Har Sunday 9 bje email send hoga
-   //@Scheduled(cron = "0 * * ? * *")// hr minute run hoga
-
+    // 👉 Sunday 9 AM
+     @Scheduled(cron = "0 0 9 ? * SUN")
+    // 👉 Testing ke liye (har minute)
+    //@Scheduled(cron = "0 * * ? * *")
     public void fetchUsersAndSendSaMail() {
 
         List<User> users = userRepository.getUserForSA();
 
         for (User user : users) {
 
-            List<JournalEntry> journalEntries = user.getJournalEntries();
+            if (user.getJournalEntries() == null) continue;
 
-            // 🔥 NULL HANDLE FIX (main issue solved)
-            List<Sentiment> sentiments = journalEntries.stream()
-                    .filter(x -> x.getDate().isAfter(LocalDateTime.now().minus(7, ChronoUnit.DAYS)))
-                    .map(x -> x.getSentiment() != null ? x.getSentiment() : Sentiment.ANGRY)
-                    .collect(Collectors.toList());
+            List<JournalEntry> entries = user.getJournalEntries();
 
-            Map<Sentiment, Integer> sentimentCounts = new HashMap<>();
+            int happy = 0, sad = 0, angry = 0;
 
-            for (Sentiment sentiment : sentiments) {
-                sentimentCounts.put(sentiment,
-                        sentimentCounts.getOrDefault(sentiment, 0) + 1);
-            }
+            for (JournalEntry entry : entries) {
 
-            // 🔥 Most frequent sentiment find
-            Sentiment mostFrequentSentiment = null;
-            int maxCount = 0;
+                if (entry.getDate().isAfter(LocalDateTime.now().minusDays(7))) {
 
-            for (Map.Entry<Sentiment, Integer> entry : sentimentCounts.entrySet()) {
-                if (entry.getValue() > maxCount) {
-                    maxCount = entry.getValue();
-                    mostFrequentSentiment = entry.getKey();
+                    if (entry.getSentiment() == Sentiment.HAPPY) happy++;
+                    else if (entry.getSentiment() == Sentiment.SAD) sad++;
+                    else angry++;
                 }
             }
 
-            // 🔥 FINAL SAFE VALUE
-            String finalSentiment = (mostFrequentSentiment != null)
-                    ? mostFrequentSentiment.toString()
-                    : "NEUTRAL";
+            // 👉 find max
+            String finalSentiment = "NEUTRAL";
 
-            // 🔥 Kafka message
-            SentimentData sentimentData = SentimentData.builder()
+            if (happy >= sad && happy >= angry) finalSentiment = "HAPPY";
+            else if (sad >= happy && sad >= angry) finalSentiment = "SAD";
+            else finalSentiment = "ANGRY";
+
+            SentimentData data = SentimentData.builder()
                     .email(user.getEmail())
                     .sentiment("Sentiment for last 7 days: " + finalSentiment)
                     .build();
 
-            kafkaTemplate.send("weekly-sentiments", sentimentData.getEmail(), sentimentData);
+            try {
+                kafkaTemplate.send("weekly-sentiments", data.getEmail(), data);
+                System.out.println("Sent to Kafka: " + data);
 
-            System.out.println("Sent to Kafka: " + sentimentData);
+            } catch (Exception e) {
+                // 👉 fallback email
+                System.out.println("Kafka failed, sending email");
+
+                emailService.sendEmail(
+                        data.getEmail(),
+                        "Weekly Sentiment Report",
+                        data.getSentiment()
+                );
+            }
         }
     }
 
+    // 🧹 Cache clear
     @Scheduled(cron = "0 0/10 * ? * *")
     public void clearAppCache() {
         appCache.init();
