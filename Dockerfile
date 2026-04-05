@@ -1,13 +1,17 @@
+# Use stable Eclipse Temurin JDK
+FROM eclipse-temurin:17-jdk
 
-# New — safe, stable version
-FROM openjdk:17-jdk-slim
-
+# Set working directory
 WORKDIR /app
 
-COPY . .
+# Copy project files
+COPY . /app
 
-RUN chmod +x mvnw && ./mvnw clean package
+# Expose port (Render default)
+EXPOSE 10000
 
-EXPOSE 8080
+# Environment variable (Mongo URI)
+ENV MONGO_URI=mongodb+srv://username:password@cluster...
 
-CMD ["java", "-jar", "target/*.jar"]
+# Command to run your app
+CMD ["java", "-jar", "target/journal-app.jar"]
