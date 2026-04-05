@@ -1,17 +1,27 @@
-# Use stable Eclipse Temurin JDK
-FROM eclipse-temurin:17-jdk
+# ===== Build Stage =====
+FROM eclipse-temurin:17-jdk AS build
 
-# Set working directory
 WORKDIR /app
 
 # Copy project files
 COPY . /app
 
+# Build the jar (Maven)
+RUN ./mvnw clean package -DskipTests
+
+# ===== Runtime Stage =====
+FROM eclipse-temurin:17-jdk
+
+WORKDIR /app
+
+# Copy jar from build stage
+COPY --from=build /app/target/*.jar app.jar
+
 # Expose port (Render default)
 EXPOSE 10000
 
-# Environment variable (Mongo URI)
+# Environment variable
 ENV MONGO_URI=mongodb+srv://username:password@cluster...
 
-# Command to run your app
-CMD ["java", "-jar", "target/journal-app.jar"]
+# Command to run the app
+CMD ["java", "-jar", "app.jar"]
