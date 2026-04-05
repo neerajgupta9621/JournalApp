@@ -1,4 +1,6 @@
-FROM openjdk:21-jdk-slim
+
+# New — safe, stable version
+FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
