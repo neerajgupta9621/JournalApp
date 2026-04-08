@@ -34,11 +34,21 @@ public class SpringSecurity {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/public/**").permitAll()
-                        .anyRequest().authenticated()
+
+                        // ✅ PUBLIC (NO LOGIN)
+                        .requestMatchers("/journal/public/**").permitAll()
+
+                        // ✅ ADMIN (LOGIN + ROLE_ADMIN)
+                        .requestMatchers("/journal/admin/**").hasRole("ADMIN")
+
+                        // ✅ USER + JOURNAL (LOGIN REQUIRED)
+                        .requestMatchers("/journal/**", "/user/**").authenticated()
+
+                        // ✅ बाकी open
+                        .anyRequest().permitAll()
                 );
 
-        // 🔥 JWT FILTER ADD
+        // 🔥 JWT FILTER
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
