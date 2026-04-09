@@ -5,19 +5,17 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: neerajgupta962150@gmail.com
-    password: vhihhcbtilimtgxl
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-          ssl:
-            trust: smtp.gmail.com
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -39,4 +37,9 @@ spring:
 
 weather:
   api:
-    key: e872ed94a87e412ea2390557262602
+    key: ${WEATHER_API_KEY}
+
+server:
+  port: ${PORT:8081}
+  servlet:
+    context-path: /journal
