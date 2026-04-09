@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prod,dev
+    active: dev,prod
 
   mail:
     host: smtp.gmail.com
@@ -37,7 +37,7 @@ spring:
 
 weather:
   api:
-    key: ${WEATHER_API_KEY}
+    key: e872ed94a87e412ea2390557262602
 
 server:
   port: ${PORT:8081}

@@ -4,7 +4,7 @@ spring:
       uri: ${REDIS_URI}
 
     mongodb:
-      uri: ${MONGO_URI}
+      uri: mongodb+srv://ng985623_db_user:S1mCwwHKa7yQoe7X@cluster0.v6qgzxz.mongodb.net/journaldb?retryWrites=true&w=majority
       auto-index-creation: true
 
   config:

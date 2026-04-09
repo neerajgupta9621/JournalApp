@@ -44,7 +44,7 @@ public class PublicController {
         response.put("message", "Application is running successfully");
         response.put("timestamp", LocalDateTime.now());
         response.put("service", "Journal Management System");
-
+        log.info("Health is OK !");
         return ResponseEntity.ok(response);
     }
 
