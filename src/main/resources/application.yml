@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: prod,dev
+    active: dev,prod  # ❗ prod bad me hata de
 
   mail:
     host: smtp.gmail.com
@@ -37,6 +37,7 @@ spring:
               default:
                 type: com.edigest.my.first.project.sentiment.SentimentData
 
+# Weather API
 weather:
   api:
     key: e872ed94a87e412ea2390557262602
