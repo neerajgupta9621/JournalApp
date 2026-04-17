@@ -1,6 +1,17 @@
+server:
+  port: ${PORT:8081}
+
 spring:
   profiles:
-    active: dev,prod  # ❗ prod bad me hata de
+    active: dev   # prod baad me use kar
+
+  data:
+    mongodb:
+      uri: mongodb+srv://ng985623_db_user:S1mCwwHKa7yQoe7X@cluster0.v6qgzxz.mongodb.net/journaldb?retryWrites=true&w=majority
+      auto-index-creation: true
+
+    redis:
+      uri: redis://default:sPCPxWzdBygAMrS8S4Ctar4u59ZYaq15@redis-10992.crce286.ap-south-1-1.ec2.cloud.redislabs.com:10992
 
   mail:
     host: smtp.gmail.com
@@ -37,7 +48,6 @@ spring:
               default:
                 type: com.edigest.my.first.project.sentiment.SentimentData
 
-# Weather API
 weather:
   api:
     key: e872ed94a87e412ea2390557262602

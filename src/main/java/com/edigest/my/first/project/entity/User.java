@@ -23,8 +23,8 @@ public class User {
 
     @Id
     private ObjectId id;
-
     @Indexed(unique = true)
+
     @NonNull
     private String userName;
     private String email;
@@ -34,9 +34,6 @@ public class User {
     private String password;
 
     @DBRef
-//    @Builder.Default
     private List<JournalEntry> journalEntries = new ArrayList<>();
-
-//    @Builder.Default
     private List<String> roles;
 }

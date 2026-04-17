@@ -1,9 +1,11 @@
 package com.edigest.my.first.project.controller;
 
+import com.edigest.my.first.project.dto.UserDTO;
 import com.edigest.my.first.project.entity.User;
 import com.edigest.my.first.project.service.UserDetailsServicempl;
 import com.edigest.my.first.project.service.UserService;
 import com.edigest.my.first.project.utilis.JwtUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/public")
+@Tag(name = "Public APIs")
 @Slf4j
 public class PublicController {
 
@@ -49,15 +52,14 @@ public class PublicController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody User user){
+    public void signup(@RequestBody UserDTO user){
+        User newUser = new User();
+        newUser.setEmail(user.getEmail());
+        newUser.setUserName(user.getUserName());
+        newUser.setPassword(user.getPassword());
+        newUser.setSentimentAnalysis(user.isSentimentAnalysis());
+        userService.saveNewUser(newUser);
 
-        boolean saved = userService.saveNewUser(user);
-
-        if(saved){
-            return ResponseEntity.ok("User saved successfully");
-        }else{
-            return ResponseEntity.status(500).body("User NOT saved");
-        }
     }
 
 
