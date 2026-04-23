@@ -3,21 +3,29 @@ server:
 
 spring:
   profiles:
-    active: dev   # prod baad me use kar
+    active: dev
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
 
   data:
     mongodb:
-      uri: mongodb+srv://ng985623_db_user:S1mCwwHKa7yQoe7X@cluster0.v6qgzxz.mongodb.net/journaldb?retryWrites=true&w=majority
+      uri: ${MONGODB_URI}
       auto-index-creation: true
 
     redis:
-      uri: redis://default:sPCPxWzdBygAMrS8S4Ctar4u59ZYaq15@redis-10992.crce286.ap-south-1-1.ec2.cloud.redislabs.com:10992
+      uri: ${REDIS_URI}
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: neerajgupta962150@gmail.com
-    password: vhihhcbtilimtgxl
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -28,7 +36,7 @@ spring:
             trust: smtp.gmail.com
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_SERVERS}
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -39,15 +47,7 @@ spring:
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      properties:
-        spring:
-          json:
-            trusted:
-              packages: "*"
-            value:
-              default:
-                type: com.edigest.my.first.project.sentiment.SentimentData
 
 weather:
   api:
-    key: e872ed94a87e412ea2390557262602
+    key: ${WEATHER_API_KEY}

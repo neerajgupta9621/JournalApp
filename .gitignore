@@ -12,3 +12,8 @@ target/
 
 # Reports
 htmlReport/
+
+# Env files (IMPORTANT)
+.env
+*.env
+safety.env
