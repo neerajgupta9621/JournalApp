@@ -16,4 +16,4 @@ htmlReport/
 # Env files (IMPORTANT)
 .env
 *.env
-safety.env
+.env
