@@ -44,9 +44,23 @@ spring:
 
     consumer:
       group-id: weekly-sentiment-group
-      auto-offset-reset: earliest
+      auto-offset-reset: latest   # 🔥 important (old corrupt data skip karega)
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+
+      properties:
+        spring:
+          deserializer:
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
+
+          json:
+            trusted:
+              packages: com.edigest.my.first.project.sentiment
+            value:
+              default:
+                type: com.edigest.my.first.project.sentiment.SentimentData
 
 weather:
   api:
