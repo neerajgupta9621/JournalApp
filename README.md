@@ -1,251 +1,329 @@
-# 📓 Journal Application (Spring Boot + MongoDB + Spring Security)
+# 🚀 Journal Application (Production Ready Backend)
 
-A RESTful Journal Application built using **Spring Boot**, **MongoDB**, and **Spring Security (Basic Authentication)**.
-Users can create accounts, write journal entries, and admins can manage users.
+A **production-ready backend system** built using **Spring Boot**, featuring **JWT Authentication, OAuth2 Login, Kafka Event Streaming, Redis Caching, Email Notifications**, and deployed on cloud.
 
 ---
 
-# 🚀 Features
+# 🌟 Key Features
 
-* 🔐 User Authentication using **Spring Security (Basic Auth)**
-* 👤 User Registration
-* 📓 Create and Manage Journal Entries
-* 🛡 Role Based Authorization (USER / ADMIN)
-* 📡 REST API Architecture
-* 🗄 MongoDB Database Integration
-* ⚡ Health Check Endpoint
+## 🔐 Authentication & Security
+
+* JWT आधारित Authentication (Bearer Token)
+* OAuth2 Login (Google)
+* Spring Security (Role-Based Access Control)
+* Secure API endpoints
+
+---
+
+## 👤 User & Journal Management
+
+* User Registration & Login
+* Create / Update / Delete Journal Entries
+* User-specific journal storage (MongoDB)
+
+---
+
+## ⚡ Advanced Backend Features
+
+* 📩 Email Sending (Kafka + Gmail SMTP)
+* 📨 Kafka Producer & Consumer (Event Driven)
+* 🧠 Redis Caching (Performance Optimization)
+* 📊 Swagger UI (API Documentation)
+* 🌐 REST APIs
+
+---
+
+## ☁️ Deployment
+
+* 🚀 Deployed on Render
+* 🌍 Environment-based configuration
 
 ---
 
 # 🛠 Tech Stack
 
-* Java 17 / 21
+* Java 21
 * Spring Boot
 * Spring Security
+* JWT (Bearer Token)
+* OAuth2 (Google Login)
 * MongoDB Atlas
+* Redis
+* Apache Kafka
+* Spring Mail
+* Swagger (OpenAPI)
 * Maven
-* Lombok
-* REST APIs
 
 ---
 
-# 📂 Project Structure
+# ⚙️ Configuration (application.yml)
 
-```
-src/main/java/com/example/journal
+```yaml
+server:
+  port: ${PORT:8081}
 
-│
-├── controller
-│   ├── PublicController
-│   ├── JournalEntryController
-│   └── AdminController
-│
-├── service
-│   ├── UserService
-│   └── JournalEntryService
-│
-├── repository
-│   ├── UserRepository
-│   └── JournalEntryRepository
-│
-├── model
-│   ├── User
-│   └── JournalEntry
-│
-├── config
-│   └── SecurityConfig
-│
-└── JournalApplication.java
+spring:
+  profiles:
+    active: dev
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      auto-index-creation: true
+
+    redis:
+      uri: ${REDIS_URI}
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVERS}
+
+weather:
+  api:
+    key: ${WEATHER_API_KEY}
 ```
 
 ---
 
-# ⚙️ Setup & Installation
+# 🔐 Authentication Methods
 
-### 1️⃣ Clone the repository
+## 1️⃣ JWT Authentication
+
+* Login → JWT Token generate
+* Use in header:
+
+```
+Authorization: Bearer <your_token>
+```
+
+---
+
+## 2️⃣ OAuth2 Login (Google)
+
+* Secure login using Google account
+* Requires:
+
+  * GOOGLE_CLIENT_ID
+  * GOOGLE_CLIENT_SECRET
+
+---
+
+# 📡 API Documentation
+
+Swagger UI:
+
+```
+http://localhost:8081/swagger-ui/index.html
+```
+
+---
+
+# 📂 Complete Project Structure
 
 ```bash
-git clone https://github.com/yourusername/journal-app.git
+my-first-project/
+│
+├── .github/
+├── .mvn/
+│
+├── src/
+│   ├── main/
+│   │   ├── java/com/edigest/my/first/project/
+│   │   │
+│   │   │── api/response/
+│   │   │── cache/
+│   │   │
+│   │   │── config/
+│   │   │   ├── EnvConfig.java
+│   │   │   ├── RedisConfig.java
+│   │   │   ├── SpringSecurity.java
+│   │   │   └── SwaggerConfig.java
+│   │   │
+│   │   │── constants/
+│   │   │
+│   │   │── controller/
+│   │   │   ├── AdminController.java
+│   │   │   ├── GoogleAuthController.java
+│   │   │   ├── JournalEntryController.java
+│   │   │   ├── PublicController.java
+│   │   │   └── UserController.java
+│   │   │
+│   │   │── dto/
+│   │   │   └── UserDTO.java
+│   │   │
+│   │   │── entity/
+│   │   │   ├── ConfigJournalApp.java
+│   │   │   ├── JournalEntry.java
+│   │   │   └── User.java
+│   │   │
+│   │   │── enums/
+│   │   │   └── Sentiment.java
+│   │   │
+│   │   │── jwtfilter/
+│   │   │   └── JwtFilter.java
+│   │   │
+│   │   │── repository/
+│   │   │   ├── ConfigJournalAppRepository.java
+│   │   │   ├── JournalEntryRepository.java
+│   │   │   ├── UserRepository.java
+│   │   │   └── UserRepositoryImpl.java
+│   │   │
+│   │   │── scheduler/
+│   │   │   └── UsersScheduler.java
+│   │   │
+│   │   │── service/
+│   │   │   ├── EmailService.java
+│   │   │   ├── JournalEntryService.java
+│   │   │   ├── RedisService.java
+│   │   │   ├── UserDetailsServiceImpl.java
+│   │   │   ├── UserService.java
+│   │   │   └── WeatherService.java
+│   │   │
+│   │   │── sentiment/
+│   │   │   ├── SentimentData.java
+│   │   │   └── SentimentProducer.java
+│   │   │
+│   │   │── utils/
+│   │   │
+│   │   │── JournalApplication.java
+│   │
+│   │   ├── resources/
+│   │   │   ├── static/
+│   │   │   ├── templates/
+│   │   │   ├── application.yml
+│   │   │   └── logback.xml
+│   │
+│   ├── test/
+│
+├── .env
+├── Dockerfile
+├── pom.xml
+├── README.md
+└── HELP.md
 ```
-
-### 2️⃣ Open Project
-
-Open in **IntelliJ IDEA / VS Code**
 
 ---
 
-### 3️⃣ Configure MongoDB
+# 📩 Kafka Flow
 
-Update `application.properties`
+### Producer
 
-```properties
-spring.data.mongodb.uri=your_mongodb_connection_string
-spring.data.mongodb.database=journaldb
-```
+* Event trigger hone par message send karta hai
+
+### Consumer
+
+* Message receive karke:
+
+  * Email send karta hai
+  * Data process karta hai
 
 ---
 
-### 4️⃣ Run the Application
+# 🧠 Redis Caching
+
+* Frequently accessed data cache hota hai
+* Performance improve hoti hai
+
+---
+
+# 📧 Email Service
+
+* SMTP (Gmail) based
+* Kafka events se trigger hota hai
+
+---
+
+# 🐳 Docker Support
 
 ```bash
-mvn spring-boot:run
-```
-
-or run the **main class**
-
-```
-JournalApplication.java
-```
-
-Server runs at:
-
-```
-http://localhost:8080
+docker build -t journal-app .
+docker run -p 8081:8081 journal-app
 ```
 
 ---
 
-# 📡 API Endpoints
+# 🔑 Environment Variables
 
-## 🔓 Public APIs
+| Variable             | Description        |
+| -------------------- | ------------------ |
+| PORT                 | Server Port        |
+| MONGODB_URI          | MongoDB Connection |
+| REDIS_URI            | Redis              |
+| KAFKA_SERVERS        | Kafka              |
+| MAIL_USERNAME        | Gmail              |
+| MAIL_PASSWORD        | App Password       |
+| GOOGLE_CLIENT_ID     | OAuth              |
+| GOOGLE_CLIENT_SECRET | OAuth              |
+| WEATHER_API_KEY      | Weather API        |
 
-### Create User
+---
+
+# ❗ Common Issues
+
+| Issue       | Fix           |
+| ----------- | ------------- |
+| 401         | Invalid token |
+| 403         | Role issue    |
+| Kafka error | Broker check  |
+| Email fail  | App password  |
+| Redis fail  | URI check     |
+
+---
+
+# 📊 System Flow
 
 ```
-POST /public/create-user
-```
-
-Body
-
-```json
-{
-"userName": "neeraj",
-"password": "1234"
-}
+Client
+ ↓
+Controller
+ ↓
+Service
+ ↓
+Repository → MongoDB
+ ↓
+Kafka → Consumer → Email
+ ↓
+Redis Cache
 ```
 
 ---
 
-# 👤 User APIs
+# 📈 Resume Points
 
-### Create Journal Entry
-
-```
-POST /journal
-```
-
-Authentication Required
-
-```json
-{
-"title": "My First Journal",
-"content": "Today I learned Spring Boot"
-}
-```
-
----
-
-# 🛡 Admin APIs
-
-### Get All Users
-
-```
-GET /admin/all-users
-```
-
-Admin authentication required.
-
----
-
-### Make User Admin
-
-```
-PUT /admin/make-admin/{username}
-```
-
----
-
-### Create Admin User
-
-```
-POST /admin/create-admin-user
-```
-
----
-
-# ❤️ Health Check
-
-```
-GET /health-check
-```
-
-Response
-
-```json
-{
-"status": "UP",
-"message": "Application Running"
-}
-```
-
----
-
-# 🔐 Security Rules
-
-* Passwords are **BCrypt encoded**
-* Role based access control
-* Roles stored as
-
-```
-ROLE_USER
-ROLE_ADMIN
-```
-
-Security config uses
-
-```
-hasRole("ADMIN")
-```
-
----
-
-# ❗ Common Errors
-
-| Error            | Cause                      |
-| ---------------- | -------------------------- |
-| 401              | Wrong username/password    |
-| 403              | Role missing               |
-| 500              | Server error               |
-| DBRef not saving | user not saved after entry |
-
----
-
-# 📸 Example Flow
-
-1️⃣ Create User
-2️⃣ Login using Basic Auth
-3️⃣ Create Journal Entry
-4️⃣ Admin can view all users
-
----
-
-# 🧠 Future Improvements
-
-* JWT Authentication
-* Refresh Token
-* Swagger Documentation
-* Global Exception Handling
-* DTO Layer
-* Docker Deployment
+* Built production-ready backend using Spring Boot
+* Implemented JWT & OAuth2 authentication
+* Integrated Kafka for event-driven architecture
+* Used Redis for caching
+* Deployed on cloud platform
+* Designed scalable REST APIs
 
 ---
 
 # 👨‍💻 Author
 
 **Neeraj Gupta**
-
-Java Backend Developer (Learning Phase 🚀)
+Backend Developer 🚀
 
 ---
 
-⭐ If you like this project, give it a star on GitHub.
+# ⭐ Support
+
+If you like this project:
+
+👉 Star the repository
+👉 Share with others
+
+---
