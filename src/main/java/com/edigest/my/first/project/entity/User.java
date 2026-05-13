@@ -1,5 +1,7 @@
 package com.edigest.my.first.project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,21 +21,27 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 
     @Id
     private ObjectId id;
-    @Indexed(unique = true)
 
+    @Indexed(unique = true)
     @NonNull
     private String userName;
+
     private String email;
+
     private boolean sentimentAnalysis;
 
     @NonNull
     private String password;
 
-    @DBRef
+    // 🔥 500 FIX
+    @JsonIgnore
+    @DBRef(lazy = true)
     private List<JournalEntry> journalEntries = new ArrayList<>();
+
     private List<String> roles;
 }

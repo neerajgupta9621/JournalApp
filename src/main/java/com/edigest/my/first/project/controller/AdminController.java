@@ -1,6 +1,7 @@
 package com.edigest.my.first.project.controller;
 
 import com.edigest.my.first.project.cache.AppCache;
+import com.edigest.my.first.project.dto.UserDTO;
 import com.edigest.my.first.project.entity.User;
 import com.edigest.my.first.project.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,15 +22,26 @@ public class AdminController {
 
     @Autowired
     private AppCache appCache;
-
     @GetMapping("/all-users")
     public ResponseEntity<?> getAllUsers() {
-        List<User> all = userService.getAll();
-        if (all != null && !all.isEmpty()){
-            return new ResponseEntity<>(all, HttpStatus.OK);
+        try {
+            List<User> users = userService.getAll();
+
+            if (users == null || users.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body("No users found");
+            }
+
+            return ResponseEntity.ok(users);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // logs real error in console
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to load users: " + e.getMessage());
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 
     @PostMapping("/create-admin-user")
     public void createUser(@RequestBody User user){

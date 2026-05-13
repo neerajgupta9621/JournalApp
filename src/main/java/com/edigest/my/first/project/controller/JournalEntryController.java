@@ -23,93 +23,263 @@ import java.util.stream.Collectors;
 @Tag(name = "Journal APIs")
 public class JournalEntryController {
 
-
     @Autowired
     private JournalEntryService journalEntryService;
 
     @Autowired
     private UserService userService;
 
-//Get By All (User Seen)
+    // ✅ GET ALL JOURNALS
     @GetMapping
     @Operation(summary = "Get all journal entries of a user")
     public ResponseEntity<?> getAllJournalEntriesOfUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.findByUserName(userName);
-        List<JournalEntry> all = user.getJournalEntries();
-        if (all != null && !all.isEmpty()){
-            return new ResponseEntity<>(all, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
 
-//Post By All (User Send)
-    @PostMapping
-    public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry){
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            Authentication authentication =
+                    SecurityContextHolder.getContext().getAuthentication();
+
             String userName = authentication.getName();
+
+            System.out.println("USERNAME: " + userName);
+
+            User user = userService.findByUserName(userName);
+
+            // ✅ NULL CHECK
+            if (user == null) {
+
+                return new ResponseEntity<>(
+                        "User Not Found",
+                        HttpStatus.NOT_FOUND
+                );
+            }
+
+            List<JournalEntry> all = user.getJournalEntries();
+
+            return new ResponseEntity<>(all, HttpStatus.OK);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return new ResponseEntity<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    // ✅ CREATE JOURNAL
+    @PostMapping
+    public ResponseEntity<?> createEntry(
+            @RequestBody JournalEntry myEntry) {
+
+        try {
+
+            Authentication authentication =
+                    SecurityContextHolder.getContext().getAuthentication();
+
+            String userName = authentication.getName();
+
+            System.out.println("USERNAME: " + userName);
+
+            User user = userService.findByUserName(userName);
+
+            // ✅ NULL CHECK
+            if (user == null) {
+
+                return new ResponseEntity<>(
+                        "User Not Found",
+                        HttpStatus.NOT_FOUND
+                );
+            }
+
             journalEntryService.saveEntry(myEntry, userName);
-            return new ResponseEntity<>(myEntry, HttpStatus.CREATED);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+            return new ResponseEntity<>(
+                    myEntry,
+                    HttpStatus.CREATED
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return new ResponseEntity<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 
-//Get By ID (User seen by id)
+    // ✅ GET BY ID
     @GetMapping("id/{myId}")
-    public ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable String myId){
-        ObjectId  objectId = new ObjectId(myId);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.findByUserName(userName);
-     List<JournalEntry> collect = user.getJournalEntries().stream()
-    .filter(x -> x.getId().equals(objectId))
-    .collect(Collectors.toList());
-    if (!collect.isEmpty()){
-            Optional<JournalEntry> journalEntry = journalEntryService.findById(objectId);
-            if (journalEntry.isPresent()){
-                return new ResponseEntity<>(journalEntry.get(), HttpStatus.OK);
+    public ResponseEntity<?> getJournalEntryById(
+            @PathVariable String myId) {
+
+        try {
+
+            ObjectId objectId = new ObjectId(myId);
+
+            Authentication authentication =
+                    SecurityContextHolder.getContext().getAuthentication();
+
+            String userName = authentication.getName();
+
+            User user = userService.findByUserName(userName);
+
+            if (user == null) {
+
+                return new ResponseEntity<>(
+                        "User Not Found",
+                        HttpStatus.NOT_FOUND
+                );
             }
+
+            List<JournalEntry> collect =
+                    user.getJournalEntries()
+                            .stream()
+                            .filter(x -> x.getId().equals(objectId))
+                            .collect(Collectors.toList());
+
+            if (!collect.isEmpty()) {
+
+                Optional<JournalEntry> journalEntry =
+                        journalEntryService.findById(objectId);
+
+                if (journalEntry.isPresent()) {
+
+                    return new ResponseEntity<>(
+                            journalEntry.get(),
+                            HttpStatus.OK
+                    );
+                }
+            }
+
+            return new ResponseEntity<>(
+                    HttpStatus.NOT_FOUND
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return new ResponseEntity<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
-       return new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }
 
-
-//Delete By ID  (User delete by id)
+    // ✅ DELETE
     @DeleteMapping("id/{myId}")
-    public ResponseEntity<?> deleteJournalEntryById(@PathVariable String myId){
-        ObjectId objectId = new ObjectId(myId);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-      boolean removed = journalEntryService.deleteById(objectId, userName);
-      if (removed) {
-          return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-      }else{
-          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-      }
+    public ResponseEntity<?> deleteJournalEntryById(
+            @PathVariable String myId) {
+
+        try {
+
+            ObjectId objectId = new ObjectId(myId);
+
+            Authentication authentication =
+                    SecurityContextHolder.getContext().getAuthentication();
+
+            String userName = authentication.getName();
+
+            boolean removed =
+                    journalEntryService.deleteById(objectId, userName);
+
+            if (removed) {
+
+                return new ResponseEntity<>(
+                        HttpStatus.NO_CONTENT
+                );
+            }
+
+            return new ResponseEntity<>(
+                    HttpStatus.NOT_FOUND
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return new ResponseEntity<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
-//Update By ID   (User change by id)
+    // ✅ UPDATE
     @PutMapping("id/{myId}")
-    public ResponseEntity<?> updateJournalById(@PathVariable String myId, @RequestBody JournalEntry newEntry) {
-        ObjectId objectId = new ObjectId(myId);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.findByUserName(userName);
-        List<JournalEntry> collect = user.getJournalEntries().stream().filter(x -> x.getId().equals(objectId)).toList();
-        if (!collect.isEmpty()){
-            Optional<JournalEntry> journalEntry = journalEntryService.findById(objectId);
-            if (journalEntry.isPresent()){
-                JournalEntry old = journalEntry.get();
-                old.setTitle(!newEntry.getTitle().isEmpty() ? newEntry.getTitle() : old.getTitle());
-                old.setContent(newEntry.getContent() != null && !newEntry.equals("") ? newEntry.getContent() : old.getContent());
-                journalEntryService.saveEntry(old);
-                return new ResponseEntity<>(old,HttpStatus.OK);
+    public ResponseEntity<?> updateJournalById(
+            @PathVariable String myId,
+            @RequestBody JournalEntry newEntry) {
 
+        try {
+
+            ObjectId objectId = new ObjectId(myId);
+
+            Authentication authentication =
+                    SecurityContextHolder.getContext().getAuthentication();
+
+            String userName = authentication.getName();
+
+            User user = userService.findByUserName(userName);
+
+            if (user == null) {
+
+                return new ResponseEntity<>(
+                        "User Not Found",
+                        HttpStatus.NOT_FOUND
+                );
             }
+
+            List<JournalEntry> collect =
+                    user.getJournalEntries()
+                            .stream()
+                            .filter(x -> x.getId().equals(objectId))
+                            .toList();
+
+            if (!collect.isEmpty()) {
+
+                Optional<JournalEntry> journalEntry =
+                        journalEntryService.findById(objectId);
+
+                if (journalEntry.isPresent()) {
+
+                    JournalEntry old = journalEntry.get();
+
+                    old.setTitle(
+                            newEntry.getTitle() != null &&
+                                    !newEntry.getTitle().isEmpty()
+                                    ? newEntry.getTitle()
+                                    : old.getTitle()
+                    );
+
+                    old.setContent(
+                            newEntry.getContent() != null &&
+                                    !newEntry.getContent().isEmpty()
+                                    ? newEntry.getContent()
+                                    : old.getContent()
+                    );
+
+                    journalEntryService.saveEntry(old);
+
+                    return new ResponseEntity<>(
+                            old,
+                            HttpStatus.OK
+                    );
+                }
+            }
+
+            return new ResponseEntity<>(
+                    HttpStatus.NOT_FOUND
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return new ResponseEntity<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
-     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

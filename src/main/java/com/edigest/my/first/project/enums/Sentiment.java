@@ -1,12 +1,12 @@
 package com.edigest.my.first.project.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum Sentiment {
+    HAPPY, SAD, ANGRY;
 
-    HAPPY,
-
-    SAD,
-
-    ANGRY,
-
-    ANXIOUS;
+    @JsonCreator
+    public static Sentiment from(String value) {
+        return value == null ? null : Sentiment.valueOf(value.toUpperCase());
+    }
 }

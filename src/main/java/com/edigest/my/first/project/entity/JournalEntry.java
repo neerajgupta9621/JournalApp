@@ -1,5 +1,8 @@
 package com.edigest.my.first.project.entity;
+
 import com.edigest.my.first.project.enums.Sentiment;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -15,12 +18,15 @@ import java.time.LocalDateTime;
 public class JournalEntry {
 
    @Id
+   @JsonSerialize(using = ToStringSerializer.class)
    private ObjectId id;
+
    @NonNull
    private String title;
+
    private String content;
+
    private LocalDateTime date;
+
    private Sentiment sentiment;
-
-
 }

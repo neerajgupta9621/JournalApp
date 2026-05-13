@@ -1,6 +1,5 @@
 package com.edigest.my.first.project.controller;
 
-import com.edigest.my.first.project.dto.UserDTO;
 import com.edigest.my.first.project.entity.User;
 import com.edigest.my.first.project.service.UserDetailsServicempl;
 import com.edigest.my.first.project.service.UserService;
@@ -9,12 +8,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -52,16 +49,16 @@ public class PublicController {
     }
 
     @PostMapping("/signup")
-    public void signup(@RequestBody UserDTO user){
+    public void signup(@RequestBody User user){
+
         User newUser = new User();
         newUser.setEmail(user.getEmail());
         newUser.setUserName(user.getUserName());
         newUser.setPassword(user.getPassword());
         newUser.setSentimentAnalysis(user.isSentimentAnalysis());
+
         userService.saveNewUser(newUser);
-
     }
-
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User user) {

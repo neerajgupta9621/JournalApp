@@ -1,7 +1,6 @@
 package com.edigest.my.first.project.config;
 
 import com.edigest.my.first.project.jwtfilter.JwtFilter;
-import com.edigest.my.first.project.service.UserDetailsServicempl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,47 +21,53 @@ public class SpringSecurity {
     @Autowired
     private JwtFilter jwtFilter;
 
-    @Autowired
-    private UserDetailsServicempl userDetailsService;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+
                 .csrf(csrf -> csrf.disable())
+
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+
                 .authorizeHttpRequests(auth -> auth
 
-                        // ✅ PUBLIC (NO LOGIN)
-                        .requestMatchers("/journal/public/**").permitAll()
+                        // PUBLIC
+                        .requestMatchers("/public/**").permitAll()
 
-                        // ✅ ADMIN (LOGIN + ROLE_ADMIN)
-                        .requestMatchers("/journal/admin/**").hasRole("ADMIN")
+                        // ADMIN
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        // ✅ USER + JOURNAL (LOGIN REQUIRED)
-                        .requestMatchers("/journal/**", "/user/**").authenticated()
+                        // PROTECTED
+                        .requestMatchers("/journal/**", "/user/**")
+                        .authenticated()
 
-                        // ✅ बाकी open
+                        // OTHERS
                         .anyRequest().permitAll()
                 );
 
-        // 🔥 JWT FILTER
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        // JWT FILTER
+        http.addFilterBefore(
+                jwtFilter,
+                UsernamePasswordAuthenticationFilter.class
+        );
 
         return http.build();
     }
 
-    // ✅ AuthenticationManager
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config
+    ) throws Exception {
+
         return config.getAuthenticationManager();
     }
 
-    // ✅ Password Encoder
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder(){
+
         return new BCryptPasswordEncoder();
     }
 }
