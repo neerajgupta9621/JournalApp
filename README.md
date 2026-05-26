@@ -99,3 +99,45 @@ Frontend automatically detects:
 
 ```js
 http://localhost:8081
+# 👨‍💻 Author
+
+## Neeraj Gupta 🚀
+
+Backend & Java Developer
+
+### Skills
+
+- Spring Boot
+- Java
+- JWT Authentication
+- OAuth2
+- Kafka
+- Redis
+- MongoDB
+- REST APIs
+- Spring Security
+- Swagger UI
+- HTML/CSS/JavaScript
+
+---
+
+# 🌟 About Project
+
+This project was fully designed and developed by **Neeraj Gupta** as a production-ready backend system with modern frontend dashboard support.
+
+It demonstrates:
+
+- Real-world backend architecture
+- Secure authentication
+- Event-driven systems
+- Cloud deployment
+- Responsive frontend integration
+- REST API development
+
+---
+
+# 🔗 Connect
+
+GitHub Portfolio Project 🚀
+
+Built with ❤️ by Neeraj Gupta
