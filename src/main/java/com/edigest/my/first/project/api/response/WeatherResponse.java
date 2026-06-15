@@ -1,4 +1,4 @@
-package com.edigest.my.first.project.api.rsponse;
+package com.edigest.my.first.project.api.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

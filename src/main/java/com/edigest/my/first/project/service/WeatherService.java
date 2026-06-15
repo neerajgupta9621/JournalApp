@@ -1,6 +1,6 @@
 package com.edigest.my.first.project.service;
 
-import com.edigest.my.first.project.api.rsponse.WeatherResponse;
+import com.edigest.my.first.project.api.response.WeatherResponse;
 import com.edigest.my.first.project.cache.AppCache;
 import com.edigest.my.first.project.constants.PlaceHolder;
 import org.springframework.beans.factory.annotation.Autowired;

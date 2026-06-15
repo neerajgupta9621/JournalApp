@@ -19,6 +19,8 @@ public class EnvConfig {
         setIfPresent("MAIL_PASSWORD", dotenv);
         setIfPresent("KAFKA_SERVERS", dotenv);
         setIfPresent("WEATHER_API_KEY", dotenv);
+        setIfPresent("AI_API_KEY", dotenv);
+
         System.out.println("Mongo URI: " + System.getProperty("MONGODB_URI"));
     }
 

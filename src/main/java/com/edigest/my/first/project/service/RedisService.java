@@ -1,6 +1,5 @@
 package com.edigest.my.first.project.service;
 
-import com.edigest.my.first.project.api.rsponse.WeatherResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

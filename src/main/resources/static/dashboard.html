@@ -76,10 +76,21 @@
 
         </button>
 
+        <button onclick="clearChat()" class="gray-btn">
+            🧹 Clear Chat
+        </button>
+
         <button class="red-btn"
                 onclick="logout()">
 
             🚪 Logout
+
+        </button>
+
+        <button class="cyan-btn"
+                onclick="document.getElementById('ai-section').scrollIntoView({behavior:'smooth'})">
+
+            🤖 AI Chat
 
         </button>
 
@@ -276,6 +287,13 @@
 
             </button>
 
+            <button class="execute-btn"
+                    onclick="createAdminUser()">
+
+                👑 Create Admin
+
+            </button>
+
         </div>
 
     </div>
@@ -389,6 +407,47 @@
             </button>
 
             <div id="health"></div>
+
+        </div>
+
+    </div>
+
+    <!-- AI CHAT -->
+
+    <div class="api-card glow-card" id="ai-section">
+
+        <div class="api-header cyan">
+
+            <span class="method">POST</span>
+
+            <span>/ai/chat</span>
+
+        </div>
+
+        <div class="api-body">
+
+            <label>Ask AI</label>
+
+            <textarea id="aiPrompt" placeholder="Ask anything..."></textarea>
+
+            <button
+                    class="execute-btn"
+                    onclick="askAI()">
+
+                🤖 Ask AI
+
+            </button>
+
+            <!-- 🔥 ADD THIS -->
+            <button class="execute-btn" onclick="analyzeJournal()">
+                📘 AI Analyze Journal
+            </button>
+
+            <div
+                    id="aiResponse"
+                    class="response-box">
+
+            </div>
 
         </div>
 

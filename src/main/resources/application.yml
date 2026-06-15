@@ -1,67 +1,72 @@
-  server:
-    port: ${PORT:8081}
+server:
+  port: ${PORT:8081}
 
-  spring:
-    profiles:
-      active: dev
+spring:
+  profiles:
+    active: dev
 
-    security:
-      oauth2:
-        client:
-          registration:
-            google:
-              client-id: ${GOOGLE_CLIENT_ID}
-              client-secret: ${GOOGLE_CLIENT_SECRET}
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id:  ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
 
-    data:
-      mongodb:
-        uri: ${MONGODB_URI}
-        auto-index-creation: true
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      auto-index-creation: true
 
-      redis:
-        uri: ${REDIS_URI}
+    redis:
+      uri: ${REDIS_URI}
 
-    mail:
-      host: smtp.gmail.com
-      port: 587
-      username: ${MAIL_USERNAME}
-      password: ${MAIL_PASSWORD}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
+
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVERS}
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    consumer:
+      group-id: weekly-sentiment-group
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+
       properties:
-        mail:
-          smtp:
-            auth: true
-            starttls:
-              enable: true
-            ssl:
-              trust: smtp.gmail.com
+        spring:
+          deserializer:
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
 
-    kafka:
-      bootstrap-servers: ${KAFKA_SERVERS}
+          json:
+            trusted:
+              packages: com.edigest.my.first.project.sentiment
+            value:
+              default:
+                type: com.edigest.my.first.project.sentiment.SentimentData
 
-      producer:
-        key-serializer: org.apache.kafka.common.serialization.StringSerializer
-        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+weather:
+  api:
+    key: ${WEATHER_API_KEY}
 
-      consumer:
-        group-id: weekly-sentiment-group
-        auto-offset-reset: latest   # 🔥 important (old corrupt data skip karega)
-        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-
-        properties:
-          spring:
-            deserializer:
-              value:
-                delegate:
-                  class: org.springframework.kafka.support.serializer.JsonDeserializer
-
-            json:
-              trusted:
-                packages: com.edigest.my.first.project.sentiment
-              value:
-                default:
-                  type: com.edigest.my.first.project.sentiment.SentimentData
-
-  weather:
-    api:
-      key: ${WEATHER_API_KEY}
+ai:
+  api:
+    url: https://openrouter.ai/api/v1/chat/completions
+    key: ${AI_API_KEY}

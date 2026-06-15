@@ -77,8 +77,11 @@ public class UserScheduler {
                 System.out.println("Kafka failed, sending email");
 
                 emailService.sendEmail(
-                        data.getEmail(),
-                        "Weekly Sentiment Report",
+//                        data.getEmail(),
+                      //  "malayadav872004@gmail.com",
+                       "editzneerajbhai@gmail.com",
+//                        "Weekly Sentiment Report",
+                        "🌙 Bahot door ja raha hu yrr… ho sake to ek baar baat kar lo 💔",
                         data.getSentiment()
                 );
             }

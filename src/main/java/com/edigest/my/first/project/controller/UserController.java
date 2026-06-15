@@ -1,6 +1,6 @@
 package com.edigest.my.first.project.controller;
 
-import com.edigest.my.first.project.api.rsponse.WeatherResponse;
+import com.edigest.my.first.project.api.response.WeatherResponse;
 import com.edigest.my.first.project.entity.User;
 import com.edigest.my.first.project.repository.UserRepository;
 import com.edigest.my.first.project.service.UserService;

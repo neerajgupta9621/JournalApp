@@ -761,3 +761,171 @@ button:active{
         font-size:45px;
     }
 }
+/* ===========================================
+   🤖 AI CHAT CARD
+=========================================== */
+
+#ai-section{
+
+    margin-top:30px;
+
+}
+
+/* ===========================================
+   AI TEXTAREA
+=========================================== */
+
+#aiPrompt{
+
+    width:100%;
+
+    min-height:150px;
+
+    padding:15px;
+
+    font-size:16px;
+
+    border-radius:12px;
+
+    border:2px solid #00c6ff;
+
+    outline:none;
+
+    resize:vertical;
+
+    margin-top:10px;
+
+    margin-bottom:20px;
+
+    background:#ffffff;
+
+    color:#222;
+
+    transition:0.3s;
+
+}
+
+#aiPrompt:focus{
+
+    border-color:#0099ff;
+
+    box-shadow:0 0 12px rgba(0,198,255,0.4);
+
+}
+
+/* ===========================================
+   AI RESPONSE BOX
+=========================================== */
+
+#aiResponse{
+
+    margin-top:20px;
+
+}
+
+#aiResponse .user-card{
+
+    background:#f8fbff;
+
+    border-left:5px solid #00c6ff;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    animation:fadeIn .4s ease;
+
+}
+
+#aiResponse h3{
+
+    margin-bottom:10px;
+
+}
+
+#aiResponse p{
+
+    white-space:pre-wrap;
+
+    word-break:break-word;
+
+    line-height:1.7;
+
+}
+
+/* ===========================================
+   CYAN BUTTON (AI CHAT BUTTON)
+=========================================== */
+
+.cyan-btn{
+
+    background:linear-gradient(135deg,#00c6ff,#0072ff);
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+}
+
+.cyan-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 5px 15px rgba(0,198,255,0.4);
+
+}
+
+/* ===========================================
+   CYAN API HEADER
+=========================================== */
+
+.api-header.cyan{
+
+    background:linear-gradient(135deg,#00c6ff,#0072ff);
+
+    color:white;
+
+}
+
+/* ===========================================
+   FADE ANIMATION
+=========================================== */
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(10px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+#aiResponse .user-card {
+    background: rgba(34, 197, 94, 0.1);
+}
+
+#aiResponse .user-card h3 {
+    color: #4ade80;
+}
+
+#aiResponse .user-card:nth-child(even) {
+    background: rgba(59, 130, 246, 0.1);
+}
