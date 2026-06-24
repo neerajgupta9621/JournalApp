@@ -1,8 +1,4 @@
     // ============================
-    // BASE URL
-    // ============================
-
-    // ============================
     // BASE URL AUTO DETECT
     // ============================
 
@@ -11,6 +7,12 @@
             ? "http://localhost:8081"
             : "https://journalapp-1-ek5e.onrender.com";
 
+     // ============================
+     // SELECTED EMPLOYEE STATE
+     // ============================
+     // Ye variable store karega kaunsa employee user ne select kiya hai
+
+    let selectedEmployeeId = null;
 
     // ============================
     // CHAT HISTORY
@@ -22,66 +24,39 @@
     // ============================
     // LOGIN
     // ============================
+  function login() {
 
-    function login(){
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
 
-        const username =
-            document.getElementById("username").value;
-
-        const password =
-            document.getElementById("password").value;
-
-        if(username.trim() === "" || password.trim() === ""){
-
-            alert("Username & Password Required ❌");
-
-            return;
-        }
-
-        fetch(`${BASE_URL}/public/login`,{
-
-            method:"POST",
-
-            headers:{
-                "Content-Type":"application/json"
-            },
-
-            body:JSON.stringify({
-
-                userName:username,
-                password:password
-
-            })
-
-        })
-
-        .then(async res => {
-
-            if(!res.ok){
-
-                throw new Error("Login Failed");
-            }
-
-            return res.text();
-        })
-
-        .then(token => {
-
-            localStorage.setItem("token",token);
-
-            alert("Login Successful ✅");
-
-            window.location.href="dashboard.html";
-
-        })
-
-        .catch(error => {
-
-            console.log(error);
-
-            alert("Invalid Username or Password ❌");
-        });
+    if (username.trim() === "" || password.trim() === "") {
+        alert("Username & Password Required ❌");
+        return;
     }
+
+    fetch(`${BASE_URL}/public/login`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            userName: username,
+            password: password
+        })
+    })
+    .then(res => {
+        if (!res.ok) throw new Error();
+        return res.text();
+    })
+    .then(token => {
+        localStorage.setItem("token", token);
+        alert("Login Successful ✅");
+        window.location.href = "dashboard.html";
+    })
+    .catch(() => {
+        alert("Invalid Login ❌");
+    });
+}
 
     // ============================
     // DEMO SIGNUP
@@ -194,7 +169,7 @@
 
                 <div class="user-card">
 
-                    <h3>👋 Greeting API</h3>
+                   <h3>👨‍💼 Welcome</h3>
 
                     <p>${data}</p>
 
@@ -207,7 +182,7 @@
             console.log(error);
 
             document.getElementById("greeting").innerHTML =
-                "<h3>Failed To Load Greeting ❌</h3>";
+                "<h3>Failed To Load  ❌</h3>";
         });
     }
 
@@ -246,7 +221,7 @@
 
                 <div class="user-card">
 
-                    <h3>👤 Current User</h3>
+                   <h3>👤 Employee Profile</h3>
 
                     <p>${data}</p>
 
@@ -395,7 +370,7 @@
 
             <div class="user-card">
 
-                <h3>✅ Application Running</h3>
+               <h3>✅ System Status</h3>
 
                 <p>🚀 Spring Boot Active</p>
 
@@ -410,23 +385,23 @@
     }
 
     // ============================
-    // CREATE JOURNAL
+    // CREATE EMPLOYEE
     // ============================
 
-    function createJournal(){
+    function createEmployee(){
 
-        const title =
-            document.getElementById("title").value;
+        const name =
+            document.getElementById("employeeName").value;
 
         const content =
-            document.getElementById("content").value;
+            document.getElementById("employeeDetails").value;
 
-        const sentiment =
-            document.getElementById("sentiment").value;
+        const department =
+            document.getElementById("department").value;
 
-        if(title.trim() === "" || content.trim() === ""){
+        if(name.trim() === "" || content.trim() === ""){
 
-            alert("Title & Content Required ❌");
+            alert("Name & Details Required ❌");
 
             return;
         }
@@ -442,9 +417,9 @@
 
             body:JSON.stringify({
 
-                title:title,
-                content:content,
-                sentiment:sentiment
+                title: name,
+                content: content,
+                sentiment: department
 
             })
 
@@ -457,12 +432,12 @@
                 throw new Error("Create Failed");
             }
 
-            alert("Journal Created ✅");
+            alert("Employee Added Successfully ✅");
 
-            document.getElementById("title").value="";
-            document.getElementById("content").value="";
+            document.getElementById("employeeName").value="";
+            document.getElementById("employeeDetails").value="";
 
-            loadJournals();
+            loadEmployees();
 
         })
 
@@ -470,118 +445,92 @@
 
             console.log(error);
 
-            alert("Failed To Create Journal ❌");
+            alert("Failed To Create Employee ❌");
         });
     }
 
     // ============================
-    // LOAD JOURNALS
+    // LOAD EMPLOYEES
     // ============================
+function loadEmployees() {
 
-    function loadJournals(){
+    fetch(`${BASE_URL}/journal`, {
+        method: "GET",
+        headers: {
+            "Authorization": "Bearer " + getToken()
+        }
+    })
+    .then(res => {
+        if (!res.ok) throw new Error();
+        return res.json();
+    })
+    .then(data => {
 
-        fetch(`${BASE_URL}/journal`,{
+        const container = document.getElementById("employees");
+        container.innerHTML = "";
 
-            method:"GET",
+        if (!data || data.length === 0) {
+            container.innerHTML = "<h3>No Employees Found 😅</h3>";
+            return;
+        }
 
-            headers:{
-                "Authorization":"Bearer " + getToken()
-            }
+        data.forEach(emp => {
 
-        })
+         console.log(emp);
 
-        .then(async res => {
+            const card = document.createElement("div");
+            card.className = "journal-card";
 
-            if(!res.ok){
+            card.innerHTML = `
+                <h2>👨‍💼 ${emp.title}</h2>
+                <p>${emp.content}</p>
+                <div class="sentiment-tag">🏢 ${emp.sentiment}</div>
 
-                throw new Error("Failed To Load Journals");
-            }
+                <div class="btn-group">
+                    <button class="update-btn">UPDATE</button>
+                    <button class="delete-btn">DELETE</button>
+                </div>
+            `;
 
-            return res.json();
-        })
-
-        .then(data => {
-
-            const journals =
-                document.getElementById("journals");
-
-            journals.innerHTML = "";
-
-            if(data.length===0){
-
-                journals.innerHTML =
-                    "<h2>No Journals Found 😅</h2>";
-
-                return;
-            }
-
-            data.forEach(journal => {
-
-                const journalId =
-                    journal.id?.timestamp || journal.id;
-
-                journals.innerHTML += `
-
-                    <div class="journal-card">
-
-                        <h2>${journal.title}</h2>
-
-                        <p>${journal.content}</p>
-
-                        <p>📅 ${journal.date || ""}</p>
-
-                        <div class="sentiment-tag">
-                            ${journal.sentiment}
-                        </div>
-
-                        <div class="btn-group">
-
-                            <button
-                                class="update-btn"
-                                onclick="updateJournal('${journalId}')">
-
-                                UPDATE
-
-                            </button>
-
-                            <button
-                                class="delete-btn"
-                                onclick="deleteJournal('${journalId}')">
-
-                                DELETE
-
-                            </button>
-
-                        </div>
-
-                    </div>
-                `;
+            // SELECT
+            card.addEventListener("click", () => {
+                selectEmployee(emp.id, card);
             });
 
-        })
+            // UPDATE
+            card.querySelector(".update-btn").addEventListener("click", (e) => {
+                e.stopPropagation();
+                updateEmployee(emp.id);
+            });
 
-        .catch(error => {
+            // DELETE
+            card.querySelector(".delete-btn").addEventListener("click", (e) => {
+                e.stopPropagation();
+                deleteEmployee(emp.id);
+            });
 
-            console.log(error);
-
-            document.getElementById("journals").innerHTML =
-                "<h2>Failed To Load Journals ❌</h2>";
+            container.appendChild(card);
         });
-    }
+    })
+    .catch(() => {
+        document.getElementById("employees").innerHTML =
+            "<h3>Failed To Load ❌</h3>";
+    });
+}
 
     // ============================
     // UPDATE JOURNAL
     // ============================
 
-    function updateJournal(id){
+    function updateEmployee(id){
 
-        const title =
-            prompt("Enter New Title");
+        const name =
+            prompt("Enter Employee Name");
 
-        const content =
-            prompt("Enter New Content");
+        const details =
+            prompt("Enter Employee Details");
 
-        if(!title || !content){
+        if(!name || !details){
 
             return;
         }
@@ -597,8 +546,8 @@
 
             body:JSON.stringify({
 
-                title:title,
-                content:content
+                title:name,
+                content:details
 
             })
 
@@ -611,9 +560,9 @@
                 throw new Error("Update Failed");
             }
 
-            alert("Journal Updated ✅");
+            alert("Employee Updated ✅");
 
-            loadJournals();
+            loadEmployees();
 
         })
 
@@ -629,10 +578,10 @@
     // DELETE JOURNAL
     // ============================
 
-    function deleteJournal(id){
+    function deleteEmployee(id){
 
         const confirmDelete =
-            confirm("Delete Journal ?");
+            confirm("Delete Employee ?");
 
         if(!confirmDelete){
             return;
@@ -655,9 +604,9 @@
                 throw new Error("Delete Failed");
             }
 
-            alert("Journal Deleted ✅");
+            alert("Employee Deleted ✅");
 
-            loadJournals();
+            loadEmployees();
 
         })
 
@@ -722,6 +671,18 @@
                             ${user.roles}
                         </p>
 
+                        <div class="btn-group">
+
+                            <button
+                                class="delete-btn"
+                                onclick="deleteAdminUser('${user.userName}')">
+
+                                🗑 Delete
+
+                            </button>
+
+                        </div>
+
                     </div>
                 `;
             });
@@ -748,7 +709,7 @@
 
             <div class="user-card">
 
-                <h3>🔐 JWT TOKEN</h3>
+                <h3>🔐 Current Login Token</h3>
 
                 <p style="word-break:break-all;">
                     ${token}
@@ -812,7 +773,12 @@
             })
 
         })
-        .then(res => res.text())
+        .then(res => {
+            if(!res.ok){
+                throw new Error("AI Failed");
+            }
+            return res.text();
+        })
         .then(data => {
 
             // save chat history
@@ -876,28 +842,63 @@
             localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
     }
 
+ // ============================
+ // JOURNAL → AI ANALYSIS (DB BASED)
+ // ============================
+ // Ab textarea se nahi, DB se selected employee fetch hoga
 
-    // ============================
-    // JOURNAL → AI ANALYSIS
-    // ============================
-    function analyzeJournal(){
+function analyzeEmployee(){
 
-        const content = document.getElementById("content").value;
+    // Step 1: check if user selected journal
+    if(!selectedEmployeeId){
+        alert("⚠️ Pehle employee select karo");
+        return;
+    }
 
-        if(content.trim() === ""){
-            alert("Write journal first ❌");
-            return;
+    // Step 2: DB se journal fetch karo
+    fetch(`${BASE_URL}/journal/id/${selectedEmployeeId}`,{
+
+        method:"GET",
+
+        headers:{
+            "Authorization":"Bearer " + getToken()
         }
 
-        document.getElementById("aiPrompt").value =
-            "Analyze this journal mood and give advice: " + content;
+    })
 
+    .then(res => {
+
+        if(!res.ok){
+            throw new Error("Journal fetch failed");
+        }
+
+        return res.json();
+    })
+
+    .then(journal => {
+
+        // Step 3: AI prompt set karo
+        document.getElementById("aiPrompt").value =
+            "Analyze this employee information and provide professional feedback: " + journal.content;
+
+        // Step 4: AI call
         askAI();
 
+        // Step 5: scroll to AI section
         document.getElementById("ai-section")
             .scrollIntoView({ behavior: "smooth" });
-    }
-    // ============================
+
+    })
+
+    .catch(error => {
+
+        console.log(error);
+
+        alert("❌ Employee load failed");
+    });
+}
+
+ // ============================
     // CLEAR CHAT
     // ============================
     function clearChat(){
@@ -910,13 +911,28 @@
     // ============================
     // LOAD SAVED CHAT
     // ============================
-    window.onload = function(){
-        const saved = localStorage.getItem("chatHistory");
-        if(saved){
-            chatHistory = JSON.parse(saved);
-            renderChat();
-        }
-    }
+   window.onload = function(){
+
+       const saved = localStorage.getItem("chatHistory");
+
+       if(saved){
+           chatHistory = JSON.parse(saved);
+           renderChat();
+       }
+
+       if(window.location.pathname.includes("dashboard.html")){
+
+           loadGreeting();
+
+           loadEmployees();
+
+           loadUsers();
+
+           loadProfile();
+
+           healthCheck();
+       }
+   }
 
 
     // ============================
@@ -1040,18 +1056,61 @@
     }
 
     // ============================
-    // AUTO LOAD
+    // DELETE ADMIN USER
     // ============================
 
-    if(window.location.pathname.includes("dashboard.html")){
+    function deleteAdminUser(userName){
 
-        loadGreeting();
+        const confirmDelete =
+            confirm("Delete " + userName + " ?");
 
-        loadJournals();
+        if(!confirmDelete){
+            return;
+        }
 
-        loadUsers();
+        fetch(`${BASE_URL}/admin/delete-user/${userName}`,{
 
-        loadProfile();
+            method:"DELETE",
 
-        healthCheck();
-    }
+            headers:{
+                "Authorization":"Bearer " + getToken()
+            }
+
+        })
+
+        .then(res=>{
+
+            if(!res.ok){
+                throw new Error();
+            }
+
+            alert("User Deleted Successfully ✅");
+
+            loadUsers();
+
+        })
+
+        .catch(()=>{
+
+            alert("Delete Failed ❌");
+
+        });
+  }
+
+
+   // ============================
+   // SELECT JOURNAL FUNCTION (UPDATED)
+   // ============================
+function selectEmployee(id, card){
+
+    selectedEmployeeId = id;
+
+    document.querySelectorAll(".journal-card")
+        .forEach(c => c.classList.remove("selected"));
+
+    card.classList.add("selected");
+
+    console.log("Selected Employee:", id);
+
+    alert("Employee Selected ✅");
+}

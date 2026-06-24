@@ -73,5 +73,9 @@ public class UserService {
          return userRepository.findByUserName(userName);
   }
 
+    public void deleteByUserName(String userName){
+        userRepository.deleteByUserName(userName);
+    }
+
 }
 // controller ---> Service --> REPOSITORY -->

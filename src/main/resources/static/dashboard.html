@@ -8,7 +8,10 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Journal Dashboard</title>
+    <title>Employee Information System</title>
+
+
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
 
     <link rel="stylesheet" href="/style.css">
 
@@ -24,25 +27,25 @@
 
     <div>
 
-        <h1>📘 Journal Dashboard</h1>
+        <h1>👨‍💼 Employee Information System</h1>
 
-        <p>Spring Boot + JWT + MongoDB + Swagger APIs</p>
+        <p>Spring Boot + JWT + MongoDB Employee Management Portal</p>
 
     </div>
 
     <div class="top-buttons">
 
         <button class="green-btn"
-                onclick="loadJournals()">
+                onclick="loadEmployees()">
 
-            📚 Journals
+            👨‍💼 Employees
 
         </button>
 
         <button class="blue-btn"
                 onclick="loadUsers()">
 
-            👤 Admin Users
+            👨‍💼 Manage Employees
 
         </button>
 
@@ -51,14 +54,14 @@
         <button class="cyan-btn"
                 onclick="document.getElementById('create-user-section').scrollIntoView({behavior:'smooth'})">
 
-            ➕ Create User
+            ➕ Add Employee
 
         </button>
 
         <button class="orange-btn"
                 onclick="loadProfile()">
 
-            🧑 Profile
+            👤 Employee Profile
 
         </button>
 
@@ -90,7 +93,7 @@
         <button class="cyan-btn"
                 onclick="document.getElementById('ai-section').scrollIntoView({behavior:'smooth'})">
 
-            🤖 AI Chat
+            🤖 AI Assistant
 
         </button>
 
@@ -110,7 +113,7 @@
 
             <span class="method">GET</span>
 
-            <span>/user</span>
+            <span>/dashboard</span>
 
         </div>
 
@@ -119,7 +122,7 @@
             <button class="execute-btn"
                     onclick="loadGreeting()">
 
-                Execute
+                Welcome Employee
 
             </button>
 
@@ -132,7 +135,7 @@
 
     </div>
 
-    <!-- CREATE JOURNAL -->
+    <!-- ADD EMPLOYEE -->
 
     <div class="api-card glow-card">
 
@@ -140,7 +143,7 @@
 
             <span class="method">POST</span>
 
-            <span>/journal</span>
+            <span>/employee</span>
 
         </div>
 
@@ -150,35 +153,35 @@
 
                 <div>
 
-                    <label>Journal Title</label>
+                    <label>Employee Name</label>
 
                     <input
                             type="text"
-                            id="title"
-                            placeholder="Enter Journal Title">
+                            id="employeeName"
+                            placeholder="Enter Employee Name">
 
                 </div>
 
                 <div>
 
-                    <label>Sentiment</label>
+                    <label>Department</label>
 
-                    <select id="sentiment">
+                    <select id="department">
 
-                        <option value="HAPPY">
-                            HAPPY
+                        <option value="IT">
+                            IT
                         </option>
 
-                        <option value="SAD">
-                            SAD
+                        <option value="HR">
+                            HR
                         </option>
 
-                        <option value="ANGRY">
-                            ANGRY
+                        <option value="Finance">
+                            Finance
                         </option>
 
-                        <option value="ANXIOUS">
-                            ANXIOUS
+                        <option value="Sales">
+                            Sales
                         </option>
 
                     </select>
@@ -187,18 +190,18 @@
 
             </div>
 
-            <label>Journal Content</label>
+            <label>Employee Details</label>
 
             <textarea
-                    id="content"
-                    placeholder="Write your journal content here...">
+                    id="employeeDetails"
+                    placeholder="Enter Employee Details">
 
             </textarea>
 
             <button class="execute-btn"
-                    onclick="createJournal()">
+                    onclick="createEmployee()">
 
-                ✨ Create Journal
+                ➕ Add Employee
 
             </button>
 
@@ -206,7 +209,7 @@
 
     </div>
 
-    <!-- CREATE USER -->
+    <!-- Add Employee -->
 
     <div class="api-card glow-card"
          id="create-user-section">
@@ -215,7 +218,7 @@
 
             <span class="method">POST</span>
 
-            <span>/public/signup</span>
+            <span>/employee/register</span>
 
         </div>
 
@@ -283,14 +286,14 @@
             <button class="execute-btn"
                     onclick="createUser()">
 
-                ➕ Create User
+                ➕ Add Employee
 
             </button>
 
             <button class="execute-btn"
                     onclick="createAdminUser()">
 
-                👑 Create Admin
+                👑 Create HR Manager
 
             </button>
 
@@ -298,7 +301,7 @@
 
     </div>
 
-    <!-- JOURNALS -->
+    <!-- EMPLOYEE LIST -->
 
     <div class="api-card glow-card">
 
@@ -306,21 +309,21 @@
 
             <span class="method">GET</span>
 
-            <span>/journal</span>
+            <span>/employee</span>
 
         </div>
 
         <div class="api-body">
 
             <button class="execute-btn"
-                    onclick="loadJournals()">
+                    onclick="loadEmployees()">
 
-                Execute
+                Load Data
 
             </button>
 
-            <div id="journals"
-                 class="journal-grid">
+            <div id="employees"
+                 class="employee-grid">
 
             </div>
 
@@ -336,7 +339,7 @@
 
             <span class="method">GET</span>
 
-            <span>/admin/all-users</span>
+            <span>/employee/all-users</span>
 
         </div>
 
@@ -345,7 +348,7 @@
             <button class="execute-btn"
                     onclick="loadUsers()">
 
-                Execute
+                Load Employees
 
             </button>
 
@@ -366,7 +369,7 @@
 
             <span class="method">GET</span>
 
-            <span>/user/profile</span>
+            <span>/employee/profile</span>
 
         </div>
 
@@ -375,7 +378,7 @@
             <button class="execute-btn"
                     onclick="loadProfile()">
 
-                Execute
+                View Profile
 
             </button>
 
@@ -393,7 +396,7 @@
 
             <span class="method">GET</span>
 
-            <span>/health-check</span>
+            <span>/system/status</span>
 
         </div>
 
@@ -402,7 +405,7 @@
             <button class="execute-btn"
                     onclick="healthCheck()">
 
-                Execute
+                Check Status
 
             </button>
 
@@ -411,6 +414,7 @@
         </div>
 
     </div>
+
 
     <!-- AI CHAT -->
 
@@ -426,32 +430,46 @@
 
         <div class="api-body">
 
-            <label>Ask AI</label>
+            <label>Ask AI Assistant</label>
 
-            <textarea id="aiPrompt" placeholder="Ask anything..."></textarea>
-
-            <button
-                    class="execute-btn"
-                    onclick="askAI()">
-
-                🤖 Ask AI
-
-            </button>
-
-            <!-- 🔥 ADD THIS -->
-            <button class="execute-btn" onclick="analyzeJournal()">
-                📘 AI Analyze Journal
-            </button>
-
+            <!-- Chat History -->
             <div
                     id="aiResponse"
                     class="response-box">
 
             </div>
 
+            <!-- Input Box -->
+            <textarea
+                    id="aiPrompt"
+                    placeholder="Ask about employee data...">
+        </textarea>
+
+            <!-- Buttons -->
+            <div class="btn-group">
+
+                <button
+                        class="execute-btn"
+                        onclick="askAI()">
+
+                    🤖 Ask AI Assistant
+
+                </button>
+
+                <button
+                        class="execute-btn"
+                        onclick="analyzeEmployee()">
+
+                    👨‍💼 AI Analyze Employee
+
+                </button>
+
+            </div>
+
         </div>
 
     </div>
+
 
     <!-- TOKEN -->
 
@@ -461,7 +479,7 @@
 
             <span class="method">JWT</span>
 
-            <span>Current Token</span>
+            <span>Current Login Token</span>
 
         </div>
 
@@ -470,7 +488,7 @@
             <button class="execute-btn"
                     onclick="showToken()">
 
-                Show Token
+                View Token
 
             </button>
 
@@ -484,6 +502,7 @@
     </div>
 
 </div>
+
 
 <script src="/script.js"></script>
 

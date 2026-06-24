@@ -48,6 +48,14 @@ public class AdminController {
         userService.saveAdmin(user);
     }
 
+    @DeleteMapping("/delete-user/{userName}")
+    public ResponseEntity<String> deleteUser(@PathVariable String userName){
+
+        userService.deleteByUserName(userName);
+
+        return ResponseEntity.ok("User Deleted Successfully");
+    }
+
     @GetMapping("clear-app-cache")
     public void clearAppCache(){
        appCache.init();
